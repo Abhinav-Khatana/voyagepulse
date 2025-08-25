@@ -1,6 +1,6 @@
 let processedBlob = null; // Store processed file for download
 
-// 🔹 Update this to your deployed backend URL
+// 🔹 Update to your deployed backend URL
 const API_BASE = "https://voyagepulse-backend.onrender.com"; 
 
 async function uploadFile() {
@@ -47,7 +47,6 @@ async function uploadFile() {
     const json = await res.json();
     processedBlob = new Blob([JSON.stringify(json, null, 2)], { type: "application/json" });
 
-    // Stop spinner and show result
     spinner.remove();
     output.innerHTML = `<pre>${JSON.stringify(json, null, 2)}</pre>`;
     downloadBtn.disabled = false;
@@ -73,6 +72,5 @@ function downloadFile() {
   a.remove();
 }
 
-// Event listeners
 document.getElementById("uploadBtn").addEventListener("click", uploadFile);
 document.getElementById("downloadBtn").addEventListener("click", downloadFile);

@@ -1,5 +1,9 @@
 let processedBlob = null; // Store processed file for download
 
+// 🔹 Update this to your deployed backend URL
+const API_BASE = "https://voyagepulse-backend.onrender.com"; 
+// Example: "https://voyagepulse-backend.onrender.com"
+
 async function uploadFile() {
   const fileInput = document.getElementById("fileInput");
   const output = document.getElementById("output");
@@ -26,7 +30,7 @@ async function uploadFile() {
   formData.append("file", fileInput.files[0]);
 
   try {
-    const res = await fetch("http://127.0.0.1:5000/api/upload", {
+    const res = await fetch(`${API_BASE}/api/upload`, {
       method: "POST",
       body: formData
     });
@@ -38,12 +42,12 @@ async function uploadFile() {
       return;
     }
 
-    const blob = await res.blob();
-    processedBlob = blob; // store the blob for download
+    const json = await res.json();
+    processedBlob = new Blob([JSON.stringify(json, null, 2)], { type: "application/json" });
 
-    // Stop spinner and show success
+    // Stop spinner and show result
     spinner.remove();
-    output.innerHTML = `<p style="color:green;">✅ File uploaded successfully!</p>`;
+    output.innerHTML = `<pre>${JSON.stringify(json, null, 2)}</pre>`;
     downloadBtn.disabled = false; // enable download
 
   } catch (err) {
